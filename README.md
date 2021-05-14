@@ -1,5 +1,23 @@
+```text
+_ .-') _    ('-. _   .-')                     .-. .-')      .-') _.-. .-')   
+( (  OO) ) _(  OO( '.( OO )_                   \  ( OO )    ( OO ) \  ( OO )  
+ \     .'_(,------,--.   ,--..-'),-----.        ;-----.\,--./ ,--,' ;-----.\  
+ ,`'--..._)|  .---|   `.'   ( OO'  .-.  '       | .-.  ||   \ |  |\ | .-.  |  
+ |  |  \  '|  |   |         /   |  | |  |       | '-' /_|    \|  | )| '-' /_) 
+ |  |   ' (|  '--.|  |'.'|  \_) |  |\|  |       | .-. `.|  .     |/ | .-. `.  
+ |  |   / :|  .--'|  |   |  | \ |  | |  |       | |  \  |  |\    |  | |  \  | 
+ |  '--'  /|  `---|  |   |  |  `'  '-'  '       | '--'  |  | \   |  | '--'  / 
+ `-------' `------`--'   `--'    `-----'        `------'`--'  `--'  `------'  
+```
+
 # demo_bnb
 Application similar to Airbnb
+
+#### Functionalities:
+- Create Account 
+- Login
+- Add/Search Rooms 
+- Update/Check room availability
 
 To setup MongoDB using docker:
 ```console
@@ -12,7 +30,7 @@ aditya@desktop:~$ docker search mongodb
 aditya@desktop:~$ docker pull mongo
 
 # 4. Run the image in detach mode
-# map the container's port 27017 to host's 27017
+# map the container port 27017 to 27017 of host
 # Mongodb listens on 27017 by default
 aditya@desktop:~$ docker run -d -p 27017:27017 mongo
 
