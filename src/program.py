@@ -1,6 +1,8 @@
 import sys
 from enum import Enum
 from colorama import Fore, init
+
+import data.mongo_setup as mongo_setup
 from infra.switchlang import switch
 import program_guests
 import program_hosts
@@ -12,8 +14,8 @@ class UserIntent(Enum):
 
 
 def main():
-    # TODO: Setup mongoengine global values
-
+    # Setup mongoengine global values
+    mongo_setup.global_init()
     print_header()
 
     try:
