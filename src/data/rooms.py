@@ -1,6 +1,6 @@
 import mongoengine
 from datetime import datetime
-from mongo_setup import PhoneField, MONGODB_ALIAS_CORE
+from data.mongo_setup import MONGODB_ALIAS_CORE
 
 import data.bookings
 

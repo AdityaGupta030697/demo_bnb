@@ -1,6 +1,6 @@
 import mongoengine
 from datetime import datetime
-from mongo_setup import PhoneField, MONGODB_ALIAS_CORE
+from data.mongo_setup import PhoneField, MONGODB_ALIAS_CORE
 
 
 class Owner(mongoengine.Document):
@@ -15,4 +15,4 @@ class Owner(mongoengine.Document):
     guest_ids = mongoengine.ListField()
     room_ids = mongoengine.ListField()
 
-    meta = {'db_alias': MONGODB_ALIAS_CORE, 'collection': 'rooms'}
+    meta = {'db_alias': MONGODB_ALIAS_CORE, 'collection': 'owners'}

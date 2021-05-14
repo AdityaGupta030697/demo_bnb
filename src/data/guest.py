@@ -1,5 +1,5 @@
 import mongoengine
-from mongo_setup import PhoneField, MONGODB_ALIAS_CORE
+from data.mongo_setup import PhoneField, MONGODB_ALIAS_CORE
 from datetime import datetime
 
 

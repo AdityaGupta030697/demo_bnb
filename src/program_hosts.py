@@ -2,6 +2,8 @@ from colorama import Fore, init
 from infra.switchlang import switch
 import infra.state as state
 
+import services.db_services as db_svc
+
 
 def run():
     init()
@@ -43,10 +45,23 @@ def show_commands():
 
 def create_account():
     print(' ****************** REGISTER **************** ')
-    # TODO: Get name & email
-    # TODO: Create account, set as logged in.
+    # Get owner details
+    name = input("Please enter your name as 'FIRST_NAME LAST_NAME':")
+    email = input("Please enter your email id:")
+    age = int(input("Please enter your age:"))
+    phone = input("Please enter your phone number:")
+    gender = input("Please enter your gender:")
 
-    print(" -------- NOT IMPLEMENTED -------- ")
+    # Check for old account
+    old_account = db_svc.find_account_by_email(email)
+    if old_account:
+        error_msg("Account already exists with email".format(email))
+        return
+
+    # Create a new one and set it as active account
+    state.active_account = db_svc.create_account(name, email, age,
+                                                 phone, gender)
+    success_msg("Successfully created an account with email: {}".format(email))
 
 
 def log_into_account():
@@ -108,7 +123,8 @@ def exit_app():
 def get_action():
     text = '> '
     if state.active_account:
-        text = '{}> '.format(state.active_account.name)
+        text = '{} {}> '.format(state.active_account.first_name,
+                                state.active_account.last_name)
 
     action = input(text)
     return action.strip().lower()
