@@ -47,7 +47,7 @@ def create_account():
     print(' ****************** REGISTER **************** ')
     # Get owner details
     name = input("Please enter your name as 'FIRST_NAME LAST_NAME':")
-    email = input("Please enter your email id:")
+    email = input("Please enter your email id:").lower().strip()
     age = int(input("Please enter your age:"))
     phone = input("Please enter your phone number:")
     gender = input("Please enter your gender:")
@@ -67,10 +67,16 @@ def create_account():
 def log_into_account():
     print(' ****************** LOGIN **************** ')
 
-    # TODO: Get email
-    # TODO: Find account in DB, set as logged in.
+    email = input("Please enter your email id:").lower().strip()
+    # Get existing account and set as active account
+    account = db_svc.find_account_by_email(email)
 
-    print(" -------- NOT IMPLEMENTED -------- ")
+    if not account:
+        error_msg("Account doesn't exists! Please create a new one...")
+        return
+
+    state.active_account = account
+    success_msg("Successfully logged into account with email: {}".format(email))
 
 
 def register_room():
