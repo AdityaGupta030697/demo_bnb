@@ -1,4 +1,5 @@
 from colorama import Fore, init
+from dateutil import parser
 from infra.switchlang import switch
 import infra.state as state
 
@@ -82,32 +83,76 @@ def log_into_account():
 def register_room():
     print(' ****************** REGISTER ROOM **************** ')
 
-    # TODO: Require an account
-    # TODO: Get info about room
-    # TODO: Save the room to DB.
+    # Require an active account
+    if not state.active_account:
+        error_msg("Please login first to register a room!")
+        return
 
-    print(" -------- NOT IMPLEMENTED -------- ")
+    # Get info about room
+    number = input("Please enter room number: ")
+    rtype = input("Please enter room type: ")
+    price = float(input("Please enter room's price: "))
+    area = input("Please enter room's area: ")
+    if area:
+        area = float(area)
+    allow_pets = input("Allow pets? [y/n]: ").lower().startswith("y")
+    # Register the room
+    room = db_svc.register_room(state.active_account, number, rtype, price,
+                                area, allow_pets)
+    success_msg("Room {} registered successfully!".format(room.number))
+
+    # Fetch the new details in the active account
+    state.reload_account()
 
 
-def list_rooms(supress_header=False):
-    if not supress_header:
+def list_rooms(suppress_header=False):
+    # Require an active account
+    if not state.active_account:
+        error_msg("Please login first to register a room!")
+        return
+    if not suppress_header:
         print(' ****************** Your rooms **************** ')
 
-    # TODO: Require an account
-    # TODO: Get rooms, list details
-
-    print(" -------- NOT IMPLEMENTED -------- ")
+    # Get rooms, list details
+    rooms = db_svc.find_rooms_for_user(state.active_account)
+    print(Fore.YELLOW + "You have {} room(s)".format(len(rooms)) + Fore.WHITE)
+    for room in rooms:
+        print("* Room {}, {} type is priced at Rs.{} with pets {}\n"
+              .format(room.number, room.rtype, room.price,
+                      "allowed" if room.allow_pets else "not allowed"))
+        for b in room.bookings:
+            print('      * Booking: {}, {} days, booked? {}'.format(
+                b.check_in_date,
+                (b.check_out_date - b.check_in_date).days,
+                'YES' if b.booked_date is not None else 'NO'
+            ))
+    print(' ****************** END ****************')
 
 
 def update_availability():
     print(' ****************** Add available date **************** ')
 
-    # TODO: Require an account
-    # TODO: list rooms
-    # TODO: Choose room
-    # TODO: Set dates, save to DB.
+    if not state.active_account:
+        error_msg("Please login first to register a room!")
+        return
 
-    print(" -------- NOT IMPLEMENTED -------- ")
+    # List rooms
+    list_rooms()
+
+    # Choose room
+    room_number = input("Enter desired room number [Enter to cancel]: ").strip()
+    if not room_number:
+        error_msg("Cancelled!\n")
+        return
+
+    room = db_svc.find_room_by_number(room_number)
+
+    # Set dates, save to DB.
+    start_date = parser.parse(input("Enter Starting date [YYYY-MM-DD]"))
+    num_days = int(input("Enter the availability in days"))
+
+    db_svc.update_room_availability_date(room, start_date, num_days)
+    success_msg("Room {} availability updated!".format(room.number))
 
 
 def view_bookings():

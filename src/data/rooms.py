@@ -7,11 +7,11 @@ import data.bookings
 
 class Room(mongoengine.Document):
     registration_date = mongoengine.DateTimeField(default=datetime.now)
-    id = mongoengine.ObjectIdField()
+    number = mongoengine.StringField(min_length=1, required=True)
     price = mongoengine.FloatField(min_value=0.0, required=True)
-    area = mongoengine.FloatField(min_value=0.0, required=True)
+    area = mongoengine.FloatField(min_value=0.0)
     allow_pets = mongoengine.BooleanField(default=False)
-    type = mongoengine.StringField(required=True)
+    rtype = mongoengine.StringField(required=True)
 
     bookings = mongoengine.EmbeddedDocumentListField(data.bookings.Booking)
 

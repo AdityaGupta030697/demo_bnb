@@ -1,4 +1,5 @@
 from data.owners import Owner
+from services.db_services import find_account_by_email
 
 active_account: Owner = None
 
@@ -8,5 +9,4 @@ def reload_account():
     if not active_account:
         return
 
-    # TODO: pull owner account from the database.
-    pass
+    active_account = find_account_by_email(active_account.email)
