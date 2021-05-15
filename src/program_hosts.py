@@ -1,8 +1,9 @@
 from colorama import Fore, init
 from dateutil import parser
+from datetime import datetime
+
 from infra.switchlang import switch
 import infra.state as state
-
 import services.db_services as db_svc
 
 
@@ -47,11 +48,11 @@ def show_commands():
 def create_account():
     print(' ****************** REGISTER **************** ')
     # Get owner details
-    name = input("Please enter your name as 'FIRST_NAME LAST_NAME':")
-    email = input("Please enter your email id:").lower().strip()
-    age = int(input("Please enter your age:"))
-    phone = input("Please enter your phone number:")
-    gender = input("Please enter your gender:")
+    name = input("Please enter your name as 'FIRST_NAME LAST_NAME': ")
+    email = input("Please enter your email id: ").lower().strip()
+    age = int(input("Please enter your age: "))
+    phone = input("Please enter your phone number: ")
+    gender = input("Please enter your gender: ")
 
     # Check for old account
     old_account = db_svc.find_account_by_email(email)
@@ -116,12 +117,12 @@ def list_rooms(suppress_header=False):
     # Get rooms, list details
     rooms = db_svc.find_rooms_for_user(state.active_account)
     print(Fore.YELLOW + "You have {} room(s)".format(len(rooms)) + Fore.WHITE)
-    for room in rooms:
-        print("* Room {}, {} type is priced at Rs.{} with pets {}\n"
-              .format(room.number, room.rtype, room.price,
+    for idx, room in enumerate(rooms):
+        print("{} Room {}, {} type is priced at Rs.{} with pets {}"
+              .format(idx+1, room.number, room.rtype, room.price,
                       "allowed" if room.allow_pets else "not allowed"))
         for b in room.bookings:
-            print('      * Booking: {}, {} days, booked? {}'.format(
+            print('     * Booking: {}, {} days, booked? {}'.format(
                 b.check_in_date,
                 (b.check_out_date - b.check_in_date).days,
                 'YES' if b.booked_date is not None else 'NO'
@@ -140,7 +141,8 @@ def update_availability():
     list_rooms()
 
     # Choose room
-    room_number = input("Enter desired room number [Enter to cancel]: ").strip()
+    room_number = input("Enter desired room number Ex: S101, "
+                        "[Enter to cancel]: ").strip()
     if not room_number:
         error_msg("Cancelled!\n")
         return
@@ -148,8 +150,8 @@ def update_availability():
     room = db_svc.find_room_by_number(room_number)
 
     # Set dates, save to DB.
-    start_date = parser.parse(input("Enter Starting date [YYYY-MM-DD]"))
-    num_days = int(input("Enter the availability in days"))
+    start_date = parser.parse(input("Enter Starting date [YYYY-MM-DD]: "))
+    num_days = int(input("Enter the availability in days: "))
 
     db_svc.update_room_availability_date(room, start_date, num_days)
     success_msg("Room {} availability updated!".format(room.number))
@@ -157,12 +159,27 @@ def update_availability():
 
 def view_bookings():
     print(' ****************** Your bookings **************** ')
+    if not state.active_account:
+        error_msg("You must log in first to register a cage")
+        return
 
-    # TODO: Require an account
-    # TODO: Get rooms, and nested bookings as flat list
-    # TODO: Print details for each
+    rooms = db_svc.find_rooms_for_user(state.active_account)
 
-    print(" -------- NOT IMPLEMENTED -------- ")
+    bookings = [
+        (c, b)
+        for c in rooms
+        for b in c.bookings
+        if b.booked_date is not None
+    ]
+
+    print("You have {} bookings.".format(len(bookings)))
+    for c, b in bookings:
+        print(' * Room: {}, booked date: {}, from {} for {} days.'.format(
+            c.number,
+            b.booked_date.date(),
+            b.check_in_date.date(),
+            b.duration_in_days
+        ))
 
 
 def exit_app():
