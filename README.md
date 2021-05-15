@@ -13,11 +13,30 @@ _ .-') _    ('-. _   .-')                     .-. .-')      .-') _.-. .-')
 # demo_bnb
 Application similar to Airbnb
 
-#### Functionalities:
-- Create Account 
-- Login
-- Add/Search Rooms 
-- Update/Check room availability
+### Functionalities:
+
+#### Intro:
+![](src/demo_images/intro.JPG?raw=true)
+
+#### Host:
+1. Registration
+![Registration](src/demo_images/host_registration.JPG?raw=true "Registration")
+2. Login
+![Login](src/demo_images/host_login.JPG?raw=true "Login")
+3. Room Registration
+![Room Registration](src/demo_images/host_room_registration.JPG?raw=true "Room Registration")
+4. Update Room Availability
+![Room Availability](src/demo_images/host_update_room_availability.JPG?raw=true "Update Room Availability")
+
+#### Guest:
+1. Registration
+![Registration](src/demo_images/guest_registration.JPG?raw=true "Registration")
+2. Room booking
+![Room Booking](src/demo_images/guest_room_booking.JPG?raw=true "Room Booking")
+3. View guests
+![View guests](src/demo_images/guest_view.JPG?raw=true "View guests")
+4. View guest booking
+![View guest booking](src/demo_images/guest_view_bookings.JPG?raw=true "View guest booking")
 
 To setup MongoDB using docker:
 ```console
